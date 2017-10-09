@@ -1,0 +1,14 @@
+{
+  "name": "historymapper",
+  "version": "0.0.1",
+  "description": "Social network and geographical visualisation tool for historical data in Google Sheets ",
+  "main": "index.html",
+  "repository": "git@github.com:Geodan/historymapper.git",
+  "author": "Steven M. Ottens <steven.ottens@geodan.nl>",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^4.11.0",
+    "d3-force": "^1.1.0",
+    "leaflet": "^1.2.0"
+  }
+}
