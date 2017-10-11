@@ -7,8 +7,11 @@
   "author": "Steven M. Ottens <steven.ottens@geodan.nl>",
   "license": "MIT",
   "dependencies": {
+    "browserify": "^14.4.0",
     "d3": "^4.11.0",
     "d3-force": "^1.1.0",
-    "leaflet": "^1.2.0"
+    "kdbush": "^1.0.1",
+    "leaflet": "^1.2.0",
+    "requirejs": "^2.3.5"
   }
 }

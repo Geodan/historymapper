@@ -10,35 +10,78 @@ function projectPoint(lat,lon) {
 	return point;
 }
 
+function createVLinks(data) {
+	let locs = data.records.locations;
+	let links = [];
+	data.records.senders.map(s=>{
+		let source = locs.filter(l=>{return l.id === s.loc})[0];
+		links.push({source:source,target:s});
+	})
+	data.records.receivers.map(s=>{
+		let source = locs.filter(l=>{return l.id === s.loc})[0];
+		links.push({source:source,target:s});
+	})
+	return links;
+}
 function renderMap(data) {
+	let links = createVLinks(data);
+	let locations = data.records.locations;
+
+	/*let fromsimulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.loc }))
+    .force("charge", d3.forceManyBody())
+    .force("collide",d3.forceCollide( function(d){return d.accuracy  }).iterations(10)) ;
+
+
+
 	let from = svgmap.selectAll('.from')
-	  .data(data.records.records)
+	  .data(locations)
 	  .enter()
 	  .append('circle')
 	  .attr('class','from')		
-	  .attr('r',8)
-	  .attr('fill','red')
+	  .attr('r',d=>d.cnt?d.cnt/1330*20+3:3)
+	  .attr('fill','blue')
 	  .attr('stroke','white')
 	  .attr('opacity',0.3);
 
-	let to = svgmap.selectAll('.to')
-	  .data(data.records.records)
-	  .enter()
-	  .append('circle')
-	  .attr('class','to')
-	  .attr('r',8)
-	  .attr('fill','green')
-	  .attr('stroke','white')
-	  .attr('opacity',0.3)
-	  .on('click',d=>console.log(d));
+	 fromsimulation
+      .nodes(locations)
+      .on("tick", update);
+     fromsimulation
+      .force("geos",function(a,b,c){
+    	for (var i = 0, n = locations.length, node; i < n; ++i) {
+    		node = locations[i];
+    		if(node.lat != null) {
+    			let pt = projectPoint(node.lat,node.lon);
+    			node.fx= pt.x;
+    			node.fy = pt.y;
+    		}
+    	}
+    })
+	fromsimulation.force("link")
+      .links(links)*/
+      
 
-	map.on("moveend", update);    
+	map.on("zoomend", update);    
 	update();
 
-	function update() {
-		from.attr('cx',d=>projectPoint(d.fromlatitude,d.fromlongitude).x)
-		  .attr('cy',d=>projectPoint(d.fromlatitude,d.fromlongitude).y)
-		to.attr('cx',d=>projectPoint(d.tolatitude,d.tolongitude).x)
-		  .attr('cy',d=>projectPoint(d.tolatitude,d.tolongitude).y)
-	}
+	function update(e) {	
+console.log(e)
+		from.attr('cx',d=>{
+			// if(d.type==="location")
+			//  return projectPoint(d.lat,d.lon).x
+			// else return d.x
+			return d.x
+		  })
+		  .attr('cy',d=>{
+		 //  	if(d.type==="location")
+			//  return projectPoint(d.lat,d.lon).y
+			// else return d.y
+			return d.y
+		  })
+		 
+		}
+	
+
+
 }

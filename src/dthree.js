@@ -11,11 +11,11 @@ function formatPopup(data){
 
 
 function renderGraph(data) {
-  links = createLinks(data);  
+  LINKS = createLinks(data);  
   let link = svg.append("g")
     .attr("class", "links")
     .selectAll("line")
-    .data(links)
+    .data(LINKS)
     .enter().append("line")
     .attr("stroke-width", 1);
 
@@ -50,7 +50,7 @@ function renderGraph(data) {
       .on("tick", ticked);
 
   simulation.force("link")
-      .links(links);
+      .links(LINKS);
 
   function ticked() {
     link
@@ -68,9 +68,9 @@ function renderGraph(data) {
 function createLinks(data) {
   let ppl = data.sleutel;
   let links = [];
-  data.records.records.map(r=>{
-    let source = ppl.filter(p=>p.id === r.toid)[0],
-    target = ppl.filter(p=>p.id === r.fromid)[0];
+  data.records.senders.map(r=>{
+    let source = ppl.filter(p=>p.id === +r.properties.toid)[0],
+    target = ppl.filter(p=>p.id === +r.properties.fromid)[0];
     if(source!==undefined && target !== undefined) {
       source.linkCount++;
       target.linkCount++;
