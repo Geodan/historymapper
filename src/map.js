@@ -26,7 +26,7 @@ function renderMap(data) {
 		markers.clearLayers();
         markers.addData(c);
         let fixed = c.filter(d=>!d.properties.cluster);
-        fixed.map(d=>{createChildren(d,data.records)})
+        createChildren(fixed,data.records);
         
         //todo  create lijsten met locaties: zowel de fixed points als de personen
         //maak links tussen fixed points en personen
@@ -47,28 +47,30 @@ function createClusterIcon(feature, latlng) {
     return L.marker(latlng, {icon: icon});
 }
 
-function createChildren(loc,data) {	
-	let result = filterActive(data,loc.properties.id);	
-	createGraph(result,loc)
+function createChildren(locations,data) {	
+	let results = locations.reduce((a,c)=>a.concat(filterActive(data,c)),[]);
+	createGraph(results,locations)
 }
 
-function filterActive(data,id) {	
-	let rec = data.receivers.filter(d=>d.loc==id);
-	return rec.concat(data.senders.filter(d=>d.loc==id));	
+function filterActive(data,loc) {	
+	let point = map.latLngToLayerPoint(new L.LatLng(loc.geometry.coordinates[1],loc.geometry.coordinates[0]));	
+	let rec = data.receivers.filter(d=>d.loc==loc.properties.id);
+	let result = rec.concat(data.senders.filter(d=>d.loc==loc.properties.id));	
+	return result.map(d=>{d.xp=point.x,d.yp=point.y;return d})
 }
 
 function createGraph(nodes,loc) {
 
 	let sim = d3.forceSimulation(nodes)
 	.velocityDecay(0.2)
-    .force("x", d3.forceX().strength(0.002))
-    .force("y", d3.forceY().strength(0.002))
+    .force("x", d3.forceX(d=>d.xp).strength(0.2))
+    .force("y", d3.forceY(d=>d.yp).strength(0.2))
     .force("collide", d3.forceCollide().radius(8).iterations(2))
    
 	    .on("tick", ticked);
-	var point = map.latLngToLayerPoint(new L.LatLng(loc.geometry.coordinates[1],loc.geometry.coordinates[0]));	
 	
-	let g = svgmap.append("g").attr("transform", "translate(" + point.x + "," + point.y + ")"),
+	
+	let g = svgmap.append("g"),
 	    node = g.append("g").attr("stroke", "#fff").attr("stroke-width", 1.5).selectAll(".node");
 
 
