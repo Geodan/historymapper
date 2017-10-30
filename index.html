@@ -7,8 +7,10 @@
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="node_modules/d3-force/build/d3-force.min.js"></script>   
   <script src="node_modules/leaflet/dist/leaflet.js"></script> 
-  <script src="node_modules/kdbush/src/bundle.js"></script>  <script src="https://unpkg.com/topojson-client@3"></script>
- <script src="//d3js.org/topojson.v1.min.js"></script>
+  <!-- <script src="node_modules/kdbush/src/bundle.js"></script>   -->
+  <script src="https://unpkg.com/supercluster@2.3.0/dist/supercluster.min.js"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
+  <script src="//d3js.org/topojson.v1.min.js"></script>
   <style>
 .links line {
   stroke: #333;
@@ -41,7 +43,44 @@ div.tooltip {
  width: 900px;
  height: 800px;
 }
+.marker-cluster-small {
+  background-color: rgba(181, 226, 140, 0.6);
+  }
+.marker-cluster-small div {
+  background-color: rgba(110, 204, 57, 0.6);
+  }
 
+.marker-cluster-medium {
+  background-color: rgba(241, 211, 87, 0.6);
+  }
+.marker-cluster-medium div {
+  background-color: rgba(240, 194, 12, 0.6);
+  }
+
+.marker-cluster-large {
+  background-color: rgba(253, 156, 115, 0.6);
+  }
+.marker-cluster-large div {
+  background-color: rgba(241, 128, 23, 0.6);
+  }
+
+.marker-cluster {
+  background-clip: padding-box;
+  border-radius: 20px;
+  }
+.marker-cluster div {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-top: 5px;
+
+  text-align: center;
+  border-radius: 15px;
+  font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  }
+.marker-cluster span {
+  line-height: 30px;
+  }
 
 </style>
 </head>

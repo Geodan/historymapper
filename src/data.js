@@ -65,36 +65,35 @@ function parseData(data) {
     sender.id =+ d.fromid;
     sender.loc = 'la'+d.fromlatitude+'lo'+d.fromlongitude;
     sender.accuracy =+ d.fromaccuracy;
-    sender.x=d.fromlongitude==""?null:+d.fromlongitude;
-    sender.y=d.fromlatitude==""?null:+d.fromlatitude;
+    sender.lon=d.fromlongitude==""?null:+d.fromlongitude;
+    sender.lat=d.fromlatitude==""?null:+d.fromlatitude;
     sender.properties = {};
     Object.assign(sender.properties, d);
     sender.type="sender";
     receiver.id =+ d.toid;
     receiver.loc = 'la'+d.tolatitude+'lo'+d.tolongitude;
     receiver.accuracy =+ d.toaccuracy;
-    receiver.x=d.tolongitude==""?null:+d.tolongitude;
-    receiver.y=d.tolatitude==""?null:+d.tolatitude;
+    receiver.lon=d.tolongitude==""?null:+d.tolongitude;
+    receiver.lat=d.tolatitude==""?null:+d.tolatitude;
     receiver.properties = {};
     Object.assign(receiver.properties, d);
     receiver.type="receiver";
-    let sendloc = locations.filter(l=>l.id===sender.loc);
-    let recloc = locations.filter(l=>l.id===receiver.loc);
+    let sendloc = locations.filter(l=>l.properties.id===sender.loc);
+    let recloc = locations.filter(l=>l.properties.id===receiver.loc);
     if(sendloc.length===0) {
-      locations.push({"type":"location","id":sender.loc,"accuracy":sender.accuracy,"lat":sender.y,"lon":sender.x,cnt:1})
+      locations.push({"type":"Feature","geometry":{"type":"Point","coordinates":[sender.lon,sender.lat]},properties: {"id":sender.loc,"accuracy":sender.accuracy,cnt:1}})
     }
     else {
-      sendloc[0].cnt++;
+      sendloc[0].properties.cnt++;
     }
     if(recloc.length===0) {
-      locations.push({"type":"location","id":receiver.loc,"accuracy":receiver.accuracy,"lat":receiver.y,"lon":receiver.x,cnt:1})
+      locations.push({"type":"Feature","geometry":{"type":"Point","coordinates":[receiver.lon,receiver.lat]},properties: {"id":receiver.loc,"accuracy":receiver.accuracy,cnt:1}})
     }
     else {
-      recloc[0].cnt++;
+      recloc[0].properties.cnt++;
     }
     senders.push(sender);
     receivers.push(receiver);
   })
-console.log(locations)
   return {"senders":senders,"receivers":receivers,"locations":locations};
 }
