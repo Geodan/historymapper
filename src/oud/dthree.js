@@ -8,23 +8,6 @@ function formatPopup(data){
   }
   return html;
 }
-
-
-function createLinks(data) {
-  let ppl = data.sleutel;
-  let links = [];
-  data.records.map(r=>{
-    let source = ppl.filter(p=>p.id === r.toId)[0],
-    target = ppl.filter(p=>p.id === r.fromId)[0];
-    if(source!==undefined && target !== undefined) {
-      source.linkCount++;
-      target.linkCount++;
-      links.push({source:source,target:target,color: '#000'})
-    }
-  })
-  return links;
-}
-
 let node;
 
 function renderGraph(data) {
@@ -34,8 +17,7 @@ function renderGraph(data) {
     .selectAll("line")
     .data(LINKS)
     .enter().append("line")
-    .attr("stroke-width", 1)
-    .attr("id",d=>'link-'+d.source.id+'-'+d.target.id)
+    .attr("stroke-width", 1);
 
   node = svg.append("g")
     .attr("class", "nodes")
@@ -43,7 +25,6 @@ function renderGraph(data) {
     .data(data.sleutel)
     .enter().append("circle")
       .attr("r", d=>d.linkCount/4+3)
-      .attr('id', d=>'person-'+d.id)
       .attr("fill", function(d){return colors(d.properties.color)})
       .on("dblclick", dblclick)      
       .on("mouseover",d=>{
@@ -95,8 +76,49 @@ function renderGraph(data) {
         .attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
         .attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
   }
+
+
+
+  //Toggle stores whether the highlighting is on
+var toggle = 0;
+//Create an array logging what is connected to what
+var linkedByIndex = {};
+for (i = 0; i < data.sleutel.length; i++) {
+    linkedByIndex[i + "," + i] = 1;
+};
+LINKS.forEach(function (d) {
+    linkedByIndex[d.source.index + "," + d.target.index] = 1;
+});
+//This function looks up whether a pair are neighbours
+function neighboring(a, b) {
+    return linkedByIndex[a.index + "," + b.index];
+}
+function connectedNodes() {
+   
+        //Reduce the opacity of all but the neighbouring nodes
+       
+      
 }
 
+
+
+
+}
+
+function createLinks(data) {
+  let ppl = data.sleutel;
+  let links = [];
+  data.records.senders.map(r=>{
+    let source = ppl.filter(p=>p.id === +r.properties.toid)[0],
+    target = ppl.filter(p=>p.id === +r.properties.fromid)[0];
+    if(source!==undefined && target !== undefined) {
+      source.linkCount++;
+      target.linkCount++;
+      links.push({source:source,target:target,color: '#000'})
+    }
+  })
+  return links;
+}
 
 
 function dragstarted(d) {
@@ -121,3 +143,4 @@ function dblclick(d) {
   d.fx = null;
   d.fy = null;
 }
+
