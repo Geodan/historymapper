@@ -16,10 +16,12 @@ function parseResults(results) {
       data = parseData(records,data)
     }
     
-    if(update) {        
+    if(update) {    
+      DATA= data;    
      renderGraph(data);
-    //  renderMap(data);
-  
+     createMapData(data);
+    
+      
       var briefOptions = {
         shouldSort: true,
         threshold: 0.3,
@@ -49,11 +51,12 @@ function parseResults(results) {
           "properties.alternatives",
           "properties.description",
           "properties.name",
-          "properties.tags"          
+          "properties.tags"       
       ]
       };      
       SEARCHBRIEF = new Fuse(data.records, briefOptions); 
       SEARCHSLEUTEL = new Fuse(data.sleutel, sleutelOptions); 
+      goSearch(document.getElementById('search-text').value);
     }
   }
   
@@ -79,13 +82,13 @@ function parseResults(results) {
 
   function parseData(records,data) {
     if(records.feed.entry.length === 0 || data.sleutel === undefined) return false;
-    let brieven = [], locations = [];
+    let brieven = [], locations = [], frm = [], too = [];
     records.feed.entry.map(entry => {    
       let d =extractData(entry);
       if(d===null)return false;      
       let record = {};
       record.id = recordid++;
-    
+      
       record.fromId =+ d.fromid;
       let from = data.sleutel.filter(l=>l.id===record.fromId)[0];
       if(from && d.fromname !== from.properties.name) {
@@ -107,25 +110,92 @@ function parseResults(results) {
       record.toAccuracy =+ d.toaccuracy;
       record.toLon=d.tolongitude==""?null:+d.tolongitude;
       record.toLat=d.tolatitude==""?null:+d.tolatitude;
-    
+      
+      d.tags=d3.csvParseRows(d.tags)[0];  
+
       record.properties = {};
       Object.assign(record.properties, d);
 
-      let sendloc = locations.filter(l=>l.properties.id===record.fromLoc);
-      let recloc = locations.filter(l=>l.properties.id===record.toLoc);
-      if(sendloc.length===0) {
-        locations.push({"type":"Feature","geometry":{"type":"Point","coordinates":[record.fromLon,record.fromLat]},properties: {"id":record.fromLoc,"accuracy":record.fromAccuracy,cnt:1}})
+
+      if(record.fromLoc === record.toLoc) {
+        locations = addLocation(record,locations,true)
       }
       else {
-        sendloc[0].properties.cnt++;
-      }
-      if(recloc.length===0) {
-        locations.push({"type":"Feature","geometry":{"type":"Point","coordinates":[record.toLon,record.toLat]},properties: {"id":record.toLoc,"accuracy":record.toAccuracy,cnt:1}})
-      }
-      else {
-        recloc[0].properties.cnt++;
-      }
+        locations = addLocation(record,locations)        
+      }   
+      frm.push(createGeojson(record,'from'));
+      too.push(createGeojson(record,'to'))
       brieven.push(record);      
     })
-    return {"sleutel":data.sleutel,"records":brieven,"locations":locations};
+    return {"sleutel":data.sleutel,"records":brieven,"locations":locations,"from":frm, "to":too};
+  }
+
+  function addLocation(record,locations,same) {
+    if(same) {
+      let loc = locations.filter(l=>l.properties.id===record.fromLoc);
+      if(loc.length === 0) {
+        locations.push(createLocation(record,'from',same))
+      }
+      else {
+        loc[0].properties.cnt++;
+        loc[0].properties.fromcnt++;
+        loc[0].properties.tocnt++;
+      }
+    }
+
+    let sendloc = locations.filter(l=>l.properties.id===record.fromLoc);
+    let recloc = locations.filter(l=>l.properties.id===record.toLoc);
+    if(sendloc.length === 0) {
+      locations.push(createLocation(record,'from'))
+    }
+    else {
+      sendloc[0].properties.cnt++;
+      sendloc[0].properties.fromcnt++;      
+    }
+    if(recloc.length === 0) {
+      locations.push(createLocation(record,'to'))
+    }
+    else {
+      recloc[0].properties.cnt++;      
+      recloc[0].properties.tocnt++;
+    }
+    return locations;
+  }
+
+  function createLocation(record,src,same) {
+    let properties =  {
+      "id":record[src+'Loc'],
+      "accuracy":record[src+'Accuracy'],
+      cnt:1,
+      tocnt:0,
+      fromcnt:0
+    }
+    properties[src+'cnt'] = 1;
+    if(same) properties.tocnt = 1;
+    return {
+      "type":"Feature",
+      "geometry":
+        {"type":"Point",
+        "coordinates":[record[src+'Lon'],record[src+'Lat']]
+        },
+      properties: properties
+    }
+  }
+
+  function createGeojson(record,src) {
+    return {
+      "type":"Feature",
+      "geometry":
+        {"type":"Point",
+        "coordinates":[record[src+'Lon'],record[src+'Lat']]
+        },
+      properties: {
+        "id":record[src+'Loc'],
+        "accuracy":record[src+'Accuracy'],
+        "personid": record[src+'Id'],
+        "briefid": record.id,
+        "src": src,
+        "selected": record.selected!==undefined?1:0
+      }
+    }
   }

@@ -19,7 +19,7 @@ function createLinks(data) {
     if(source!==undefined && target !== undefined) {
       source.linkCount++;
       target.linkCount++;
-      links.push({source:source,target:target,color: '#000'})
+      links.push({source:source,target:target,color: '#000',properties:r.properties,recordId:r.id})
     }
   })
   return links;
@@ -45,24 +45,18 @@ function renderGraph(data) {
       .attr("r", d=>d.linkCount/4+3)
       .attr('id', d=>'person-'+d.id)
       .attr("fill", function(d){return colors(d.properties.color)})
+      .on('click',d=>createCard(d.id,'person'))
       .on("dblclick", dblclick)      
       .on("mouseover",d=>{
-       
-        node.style("opacity", function (o) {
-            return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
-        });
-        link.style("opacity", function (o) {
-            return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
-        });
-        div.transition()
+        tooltip.transition()
          .duration(200)
          .style("opacity", .9);
-        div.html(formatPopup(d.properties))
+         tooltip.html(formatPopup(d.properties))
          .style("left", (d3.event.pageX) + "px")
          .style("top", (d3.event.pageY - 28) + "px");
       })
       .on("mouseout", function(d) {
-       div.transition()
+        tooltip.transition()
          .duration(500)
          .style("opacity", 0);
 
@@ -95,9 +89,15 @@ function renderGraph(data) {
         .attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
         .attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
   }
+
+  
+
 }
 
-
+//This function looks up whether a pair are neighbours
+function neighboring(a, b) {
+  return linkedByIndex[a.index + "," + b.index];
+}
 
 function dragstarted(d) {
   d3.select(this).classed("fixed", d.fixed = true);

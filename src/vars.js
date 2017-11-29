@@ -1,15 +1,15 @@
 let sleutelTime = 0, dataTime = 0, form, recordid =0;
-let SEARCHBRIEF,SEARCHSLEUTEL;
-
+let SEARCHBRIEF,SEARCHSLEUTEL,DATA;
+let linkedByIndex = {};
 
 let colors = d3.scaleOrdinal(d3.schemeCategory20),
 svg = d3.select("#graph"),
  width = +svg.attr("width"),
  height = +svg.attr("height"),
- map = L.map('map').setView([0,0], 2),
+ 
  
  LINKS = [],
- div = d3.select("#tooltip"),
+ tooltip = d3.select("#tooltip"),
  simulation = d3.forceSimulation()
  .force("link", d3.forceLink().id(function(d) { return d.id; }))
  .force("charge", d3.forceManyBody())

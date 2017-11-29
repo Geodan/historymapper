@@ -2,17 +2,47 @@
 <html>
 <head>
   <meta charset="utf-8">
-	<title></title>
+  <title></title>
+  <link href="https://fonts.googleapis.com/css?family=Lato|Lora" rel="stylesheet"> 
   <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="node_modules/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="node_modules/leaflet.markercluster/dist/MarkerCluster.default.css" />
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="node_modules/d3-force/build/d3-force.min.js"></script>   
   <script src="node_modules/leaflet/dist/leaflet.js"></script> 
+  
+  <script src="node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"></script> 
   <script src="node_modules/fuse.js/dist/fuse.min.js"></script> 
   <!-- <script src="node_modules/kdbush/src/bundle.js"></script>   -->
-  <script src="https://unpkg.com/supercluster@2.3.0/dist/supercluster.min.js"></script>
+  
   <script src="https://unpkg.com/topojson-client@3"></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
   <style>
+
+    html, body {
+      margin: 0px;
+      padding: 0px;
+    }
+    * {      
+      font-family: 'Lato', sans-serif;
+    }
+    header {
+      width: 100%;
+      height: 80px;
+      background: #99aa00;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    .click {
+      color: #9E9D24;
+      cursor: pointer;
+    }
+    .search {
+      color: #99aa00;
+      cursor: help;
+    }
+    .click:hover {
+      text-decoration: underline;
+    }
 .links line {
   stroke: #333;
   stroke-opacity: 0.2;
@@ -34,6 +64,9 @@
   stroke-width: 2px;
   z-index: 1000;
 }
+.unselected {
+  opacity: 0.1 !important;
+}
 div.tooltip {
   position: absolute;
   padding: 2px;
@@ -47,12 +80,12 @@ div.tooltip {
 #content {
   display: flex;
   flex-direction: row;
-
+  flex-wrap: wrap;
 }
 
-#map {
- width: 900px;
- height: 800px;
+#tomap, #frommap {
+ width: 500px;
+ height: 500px;
 }
 .marker-cluster-small {
   background-color: rgba(181, 226, 140, 0.6);
@@ -87,7 +120,7 @@ div.tooltip {
 
   text-align: center;
   border-radius: 15px;
-  font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  
   }
 .marker-cluster span {
   line-height: 30px;
@@ -95,13 +128,137 @@ div.tooltip {
 
 #searchresults {
   display: flex;
+  flex-direction: column;
+  height: 600px;
+  width: 300px;
+  font-size: 13px;
+}
+.card {
+ 
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  background: white;
+  margin: 10px;
+  border-radius: 2px;
+  height: 660px;
+
+}
+.card-header {
+  
+  padding: 5px;
+  font-size: 14px;
+  background: #CDDC39;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  max-height: 60vh;
-  overflow-y: auto;
+}
+.subresult {
+  flex-grow: 1;
+  overflow: auto;
+}
+.subheader {
+  
+  padding: 2px;
+  font-size: 10px;
+  background: #ffff6e;
+  height: 24px;
+}
+#content-card {
+  width: 600px;
+}
+#content-card-text {
+  max-height: 600px;
+    overflow-y: auto;
+
+}
+header {
+  display: flex;
+  flex-direction: row;  
+}
+.enableButton {
+  width: 120px;
+  height: 24px;
+  background:#4d2c91;
+  margin: 5px;
+  padding: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  cursor:pointer;
+  opacity: 0.8;
+  color: white;
+}
+.enableButton:hover {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  margin: 6px 5px;
+}
+.enabled {
+  opacity:1;
+
+ 
+}
+.enableButton:active {
+  margin: 5px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);  
+}
+.hidden {
+  display:none;
+}
+.resetButton {
+  width: 80px;
+  height: 24px;
+  background:#4d2c91;
+  color: white;
+  margin: 5px;
+  padding: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  cursor:pointer;
+}
+.resetButton:hover {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  margin: 6px 5px;
+}
+.resetButton:active {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  margin: 5px;
+}
+.maprow {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+}
+.nw,.ne,.sw,.se {
+  height: 50px;
+  width: 50px;
+  align-items: center;
+display: flex;
+justify-content: center;
+}
+.e, .w {
+  align-items: center;
+display: flex;
+justify-content: center;
+  width: 50px;
+}
+.n, .s {
+  align-items: center;
+display: flex;
+justify-content: center;
+  width: 500px;
+  height: 50px;
+  
 }
 </style>
 </head>
 <body>
+  <header>
+    <div class="enableButton enabled" id="searchEnable" element="records">Search</div>
+    <div element="content-card" class="enableButton enabled" id="contentEnable">Content</div>
+    <div element="graph-card" class="enableButton enabled" id="graphEnable">Graph</div>
+    <div element="from-map" class="enableButton enabled" id="sourceEnable">Source Map</div>
+    <div element="to-map" class="enableButton enabled" id="destinationEnable">Destination Map</div>
+  </header>
 	<form id="spreadsheetForm">
     <div>
       <div>
@@ -116,7 +273,8 @@ div.tooltip {
   
   
   <div id="content">
-    <div id="records">
+    <div id="records" class="card">
+      <div class="card-header">
         <form id="searchForm">
             <div>
               <div>
@@ -126,25 +284,69 @@ div.tooltip {
               </div>
             </div>
           </form>
+          <div class="resetButton" card="search">reset</div>
+        </div>
           <div id="searchresults">
-            <div id="searchbrieven">
-
+           
+              <div id="s-m-header" class="subheader">People</div>
+              <div class="subresult"  id="searchmensen">
+  
+             
             </div>
-            <div id="searchmensen">
+            
+            <div id="s-b-header"  class="subheader">Letters</div>
+            <div class="subresult"  id="searchbrieven">
 
-            </div>
+            
+          </div>
           </div>
     </div>
+    <div id="content-card" class="card">
+        <div class="card-header">
+          <span>Content card</span>
+          <div class="resetButton" card="card">reset</div> 
+        </div>
+        <div id="content-card-text">
+          
+        </div>
+      
+    </div>
+    <div id="graph-card" class="card">
+        <div class="card-header">
+          <span>Network graph</span>
+          <div class="resetButton" card="graph">reset</div> 
+          </div>
   <svg id="graph" width="600" height="600"></svg>  
-  </div>
-
-<div id="map"></div>
-  <div id="tooltip" class="tooltip"></div>
+</div>
+  
+<div id="from-map" class="card">
+    <div class="card-header">
+    <span>Source map</span>
+    <div class="resetButton" card="from">reset</div> 
+      </div>
+      <div class="unknown"><span></span></div>
+      <div class="nrow maprow"><div class="nw"><span></span></div><div class="n"><span></span></div><div class="ne"><span></span></div></div>
+      <div class="maprow"><div class="w"><span></span></div><div id="frommap"></div><div class="e"><span></span></div></div>
+      <div class="maprow"><div class="sw"><span></span></div><div class="s"><span></span></div><div class="se"><span></span></div></div>
+      </div>
+<div id="to-map" class="card">
+    <div class="card-header">
+    <span>Destination map</span>
+    <div class="resetButton" card="to">reset</div> 
+      </div>
+      <div class="unknown"><span></span></div>
+<div class="nrow maprow"><div class="nw"><span></span></div><div class="n"><span></span></div><div class="ne"><span></span></div></div>
+<div class=" maprow"><div class="w"><span></span></div><div id="tomap"></div><div class="e"><span></span></div></div>
+<div class=" maprow"><div class="sw"><span></span></div><div class="s"><span></span></div><div class="se"><span></span></div></div>
+</div>
+</div><span></span>
+<div id="tooltip" class="tooltip"></div>
 
   <script type="text/javascript" src="src/vars.js"></script>
   <script type="text/javascript" src="src/data.js"></script>
   <script type="text/javascript" src="src/util.js"></script>
   <script type="text/javascript" src="src/main.js"></script>
+  <script type="text/javascript" src="src/card.js"></script>
   <script type="text/javascript" src="src/dthree.js"></script>
   <script type="text/javascript" src="src/map.js"></script>
   <script type="text/javascript" src="src/search.js"></script>
