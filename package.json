@@ -1,15 +1,35 @@
 {
   "name": "historymapper",
-  "version": "0.0.1",
-  "description": "Social network and geographical visualisation tool for historical data in Google Sheets ",
-  "main": "index.html",
+  "version": "0.1.0",
+  "description": "Social network and geographical visualisation tool for historical data in Google Sheets",
+  "main": "index.js",
   "repository": "git@github.com:Geodan/historymapper.git",
   "author": "Steven M. Ottens <steven.ottens@geodan.nl>",
   "license": "MIT",
-  "dependencies": {    
-    "d3": "^4.11.0",
-    "d3-force": "^1.1.0",
+  "scripts": {
+    "build": "webpack -p",
+    "start": "webpack-dev-server"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "css-loader": "^0.28.7",
+    "eslint": "^4.12.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.5",
+    "html-webpack-plugin": "^2.30.1",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.5"
+  },
+  "dependencies": {
+    "d3": "^4.12.0",
     "fuse.js": "^3.2.0",
-    "leaflet": "^1.2.0"    
+    "leaflet": "^1.2.0",
+    "supercluster": "^3.0.1"
   }
 }
