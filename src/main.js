@@ -1,11 +1,11 @@
-form = document.getElementById("spreadsheetForm"); 
-form.addEventListener('submit', getData);
+let varobj = getUrlVars();
 
-function getData(e) {
-  e.preventDefault();
-  var sourceUrlElement = document.getElementById('source-url');
-  var sourceUrl = sourceUrlElement.value == '' ? sourceUrlElement.placeholder:sourceUrlElement.value;
-  var url = parseGoogleSpreadsheetURL(sourceUrl);
+if(varobj.url) getData(varobj.url)
+else getData('1tZFtz3UKRoLUzDR26wtcQ4OhQCcK4kL-to-SY-bmW2M',true)
+
+function getData(e,n) {
+  if(n) insertParam('url',e);
+  var url = parseGoogleSpreadsheetURL(e);
   var requests =[new Request(buildGoogleFeedURL(url.key,1)),new Request(buildGoogleFeedURL(url.key,2))];
   getResults(requests);
   //auto updating funciton
@@ -63,3 +63,15 @@ d3.selectAll('.resetButton').on('click',()=>{
 function toggleClass(el, clas) {
   d3.select(el).classed(clas,d3.select(el).classed(clas)?false:true);
 }
+
+(function(global){
+  var MarkerMixin = {
+    _updateZIndex: function (offset) {
+      this._icon.style.zIndex = this.options.forceZIndex ? (this.options.forceZIndex + (this.options.zIndexOffset || 0)) : (this._zIndex + offset);
+    },
+    setForceZIndex: function(forceZIndex) {
+      this.options.forceZIndex = forceZIndex ? forceZIndex : null;
+    }
+  };
+  if (global) global.include(MarkerMixin);
+})(L.Marker);

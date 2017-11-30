@@ -69,7 +69,7 @@ function goSearch(e,search) {
   }).text(d=>d.properties.name).on('click',d=>createCard(d.id,'person'))
 
   persondata.exit().remove()
-
+  createMapResult(brieven)
 }
 let briefresults =  d3.select('#searchbrieven')
 let personresults =  d3.select('#searchmensen')

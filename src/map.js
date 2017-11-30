@@ -4,10 +4,14 @@ function initMap(el) {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
   let markers = L.geoJson(null, {
+    opacity: 0.3,
     pointToLayer: createClusterIcon
   }).addTo(map);
+  let results = L.geoJson(null, {
+    pointToLayer: createSearchIcon
+  }).addTo(map);
 
-  return {map:map, markers: markers, src:el}
+  return {map:map, markers: markers, src:el, results: results}
 }
 
 let maps = ['from','to'].map(d=>initMap(d))
@@ -20,12 +24,26 @@ function createClusterIcon(feature, latlng) {
       count < 100 ? 'small' :
       count < 1000 ? 'medium' : 'large';
   var icon = L.divIcon({
-      html: '<div><span>' + count + '</span></div>',
+      html: '<div><span></span></div>',
       className: 'marker-cluster marker-cluster-' + size,
       iconSize: L.point(40, 40)
   });
   return L.marker(latlng, {icon: icon});
 }
+
+function createSearchIcon(feature, latlng) {
+  var count = feature.properties.point_count!==undefined?feature.properties.point_count:1;
+  var size =
+      count < 100 ? 'small' :
+      count < 1000 ? 'medium' : 'large';
+  var icon = L.divIcon({
+      html: '<div><span>' + count + '</span></div>',
+      className: 'search-cluster search-cluster-' + size,
+      iconSize: L.point(40, 40)
+  });
+  return L.marker(latlng, {icon: icon,forceZIndex: 1000});
+}
+
 let clusters;
 function createMapData(data) {
   //data in -> filter punten from/to
@@ -34,32 +52,48 @@ function createMapData(data) {
   // maak to/from geojsons
   // maak clusters, met count en searchcount
   
-  clusters = maps.map(m=>{
+  maps.map(m=>{
     var features = [];
     data.records.forEach(r=> {
       features.push(createGeojson(r,m.src))        
     });
-    let index = createCluster(m.map,m.markers,features)
-    return index;
+    createCluster(m.map,m.markers,features)
+    
+  })
+
+
+}
+function createMapResult(data) {
+  //data in -> filter punten from/to
+  //if search -> create select/noselect
+  // loop door search resultaten en voeg een search = 1 toe aan DATA
+  // maak to/from geojsons
+  // maak clusters, met count en searchcount
+  
+  maps.map(m=>{
+    var features = [];
+    data.forEach(r=> {
+      features.push(createGeojson(r,m.src))        
+    });
+    createCluster(m.map,m.results,features,m.src)    
   })
 
 
 }
 
-function createCluster(map,markers,features) {
+function createCluster(map,markers,features,search) {
   
+  if (search && map._events.moveend.length>4)  map.off("moveend", map._events.moveend[4].fn);   
   let index = supercluster({
     radius: 40,
-    maxZoom: 20,
-    initial: function() { return {selected: 0}; },
-    map: function(props) { return {selected: props.selected}; },
-    reduce: function(accumulated, props) { accumulated.selected += props.selected; }
+    maxZoom: 20
   });
   index.load(features);
-  map.on("moveend", update);    
-  update();
+  map.on("moveend", e=>update(search));    
+  update(search);
   
-  function update() {	
+  function update(search) {	
+    console.log(search)
 		//svgmap.selectAll('g').remove();
     let bbox = map.getBounds();
     let c = index.getClusters([-180,-90,180,90],map.getZoom())
@@ -114,8 +148,8 @@ function createCluster(map,markers,features) {
       }
 
     })
-    if(this._container) {
-    let mapdiv =d3.select(this._container.parentNode.parentNode);
+    if(search) {
+    let mapdiv =d3.select('#'+search+'-map');
     mapdiv.select('.n').select('span').text(n.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0));
     mapdiv.select('.nw').select('span').text(nw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0));
     mapdiv.select('.ne').select('span').text(ne.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0));

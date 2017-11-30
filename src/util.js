@@ -48,10 +48,8 @@ function parseGoogleSpreadsheetURL(url) {
   }
 }
 function buildGoogleFeedURL(parts,sheet) {
-
   return "https://spreadsheets.google.com/feeds/list/" + parts + "/"+sheet+"/public/values?alt=json";
 }
-
 function extractData(item) {
   var item_data = {}
   for (k in item) {
@@ -62,10 +60,51 @@ function extractData(item) {
    if (isEmptyObject(item_data)) return null;
    return item_data;
 }
-
 function checkEmpty(attr) {
   if(attr===undefined) return false;
   if(attr===null) return false;
   if(attr==='') return false;
   return attr;
+}
+
+
+function  getUrlVars() {
+  var varobj = {}, url_vars = [], uv ;
+  
+  url_vars = window.location.href.slice(window.location.href.indexOf('?') + 1);
+
+  if (url_vars.match('#')) {
+    url_vars = url_vars.split('#')[0];
+  }
+  url_vars = url_vars.split('&');
+
+  for(var i = 0; i < url_vars.length; i++) {
+    uv = url_vars[i].split('=');
+    varobj[uv[0]] = uv[1];
+  }
+
+  return varobj;
+};
+function insertParam(key, value)
+{
+    key = encodeURI(key); value = encodeURI(value);
+
+    var kvp = document.location.search.substr(1).split('&');
+
+    var i=kvp.length; var x; while(i--) 
+    {
+        x = kvp[i].split('=');
+
+        if (x[0]==key)
+        {
+            x[1] = value;
+            kvp[i] = x.join('=');
+            break;
+        }
+    }
+
+    if(i<0) {kvp[kvp.length] = [key,value].join('=');}
+
+    //this will reload the page, it's likely better to store this until finished
+    document.location.search = kvp.join('&'); 
 }
