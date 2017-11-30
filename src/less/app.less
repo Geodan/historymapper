@@ -63,10 +63,56 @@ header {
   grid-template-rows:50% 50%;
   grid-template-areas:   
   "nw ne"
-  "sw se"
+  "sw se";
+  top: 80px;
+  bottom: 0px;
+  position: absolute;
+  left: 215px;
+  right: 0px;
 }
 #content-card {
   grid-area: nw;
+  display: flex;
+  flex-direction: column;
+}
+#content-card-text {
+  overflow-y:  auto;
+  .label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 2px 5px 2px 5px;
+    
+  }
+  .labelcontent {
+    margin: 2px 5px 8px 5px;
+    font-family: @font-serif;
+    
+  }
+  table {
+    width: 100%;
+  }
+  tr:nth-child(even) {
+    background: @light-grey;
+  }
+  th {
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 2px 5px 2px 5px;
+  }
+  .content__people {
+    display: flex;
+    flex-direction: row;
+    flex-flow: flow;
+    justify-content: space-between;
+    .content__people-address {
+      border: solid 1px @light-grey;
+      padding: 10px;
+      border-radius: @border-radius;
+      margin: 5px;
+      font-family: @font-sans;
+    }
+  }
 }
 #graph-card {
   grid-area: ne;
@@ -77,25 +123,28 @@ header {
     height: 100%;
   }
   .links line {
-    stroke: #333;
+    stroke: @dark-grey;
     stroke-opacity: 0.2;
+    
   }
   .links line.hilight {
-    stroke: red;
-    stroke-width: 2px !important;
+    stroke: @secondary-color;
+    stroke-width: 3px !important;
     stroke-opacity: 1 !important;
   }
   .nodes circle {
     stroke: #fff;
     stroke-width: 1.5px;
+    
   }
   .nodes circle.fixed {
-    stroke: black;
+    stroke: @dark-grey;
   }
   .nodes circle.hilight {
-    stroke: red;
-    stroke-width: 2px;
+    stroke: @secondary-color;
+    stroke-width: 4px;
     z-index: 1000;
+    
   }
   .unselected {
     opacity: 0.1 !important;

@@ -1,5 +1,7 @@
 import {Fuse} from 'fuse.js'
 
+let KEYSEARCH, RECORDSEARCH
+
 let briefOptions = {
   shouldSort: true,
   threshold: 0.3,
@@ -14,7 +16,7 @@ let briefOptions = {
     'properties.tags',
     'properties.fromlocation',
     'properties.toname',
-    'properties.tolocation'
+    'properties.tolocation'    
   ]
 }
 let sleutelOptions = {
@@ -30,11 +32,15 @@ let sleutelOptions = {
     'properties.description',
     'properties.name',
     'properties.tags'
+    //TODO: search in 'color' column
   ]
-}      
-export function keySearch (data) {
-  return new Fuse(data,sleutelOptions)
+} 
+     
+export function createSearch(data) {
+  KEYSEARCH= new Fuse(data,sleutelOptions)
+  RECORDSEARCH = new Fuse(data,briefOptions)
 }
-export function recordSearch (data) {
-  return new Fuse(data,briefOptions)
+
+export function goSearch(str) {
+  window.alert(str)
 }

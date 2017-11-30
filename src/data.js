@@ -3,7 +3,7 @@ import {buildGoogleFeedURL} from './utils/buildGoogleFeedURL'
 import {extractData} from './utils/extractData'
 import {createGeojson,createLocation} from './utils/utils'
 
-import {keySearch,recordSearch} from './search'
+import {createSearch, goSearch} from './search'
 import {renderGraph} from './graph'
 
 
@@ -54,10 +54,10 @@ function parseResults(results) {
     // DATA= data  
     renderGraph(data)
     //createMapData(data)
-  
+    createSearch(data)
     
    
-    //goSearch(document.getElementById('search-text').value);
+    goSearch(document.getElementById('search-text').value)
   }
 }
 

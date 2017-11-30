@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
-import {createCard} from './card'
+
+import {setCardData,createCard} from './card'
 
 let width = 600 //TODO: make this dynamic
 let height = 600
@@ -16,6 +17,7 @@ let simulation = d3.forceSimulation()
 
 export function renderGraph(data) {
   LINKS = createLinks(data)
+  setCardData(data,LINKS)
   let link = svg.append('g')
     .attr('class', 'links')
     .selectAll('line')
