@@ -30,6 +30,23 @@ body {
     padding: 5px;
     margin: -1px;
     color: @primary-text;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    span {
+      margin:5px;
+      font-size: 2rem;
+    }
+    .btn {      
+      background: @dark-grey;
+      &:hover {
+        background: tint(@dark-grey, 5%)
+      }
+      &:active {
+
+        background: tint(@dark-grey, -10%)
+      }
+    }
   }
 }
 
@@ -53,6 +70,36 @@ header {
 }
 #graph-card {
   grid-area: ne;
+  display: flex;
+  flex-direction: column;
+  svg {
+    width:100%;
+    height: 100%;
+  }
+  .links line {
+    stroke: #333;
+    stroke-opacity: 0.2;
+  }
+  .links line.hilight {
+    stroke: red;
+    stroke-width: 2px !important;
+    stroke-opacity: 1 !important;
+  }
+  .nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+  .nodes circle.fixed {
+    stroke: black;
+  }
+  .nodes circle.hilight {
+    stroke: red;
+    stroke-width: 2px;
+    z-index: 1000;
+  }
+  .unselected {
+    opacity: 0.1 !important;
+  }
 }
 #from-card {
   grid-area: sw;

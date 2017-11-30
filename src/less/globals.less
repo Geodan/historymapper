@@ -58,13 +58,17 @@ header {
   margin: 3px 4px 4px 3px;
   border-radius: @border-radius;
   align-self: start;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  
   cursor: pointer;
   &:hover {
     box-shadow: @shadow-2;
     margin: 4px 3px 3px 4px;  
+    background: tint(@primary-color, 10%)
   }
   &:active {
     box-shadow: @shadow-1;
     margin: 3px 4px 4px 3px;
+    background: tint(@primary-color, -10%)
   }
 }

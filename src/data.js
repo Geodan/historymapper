@@ -4,6 +4,7 @@ import {extractData} from './utils/extractData'
 import {createGeojson,createLocation} from './utils/utils'
 
 import {keySearch,recordSearch} from './search'
+import {renderGraph} from './graph'
 
 
 import * as d3 from 'd3'
@@ -51,7 +52,7 @@ function parseResults(results) {
   
   if(update) {        
     // DATA= data  
-    //renderGraph(data)
+    renderGraph(data)
     //createMapData(data)
   
     
