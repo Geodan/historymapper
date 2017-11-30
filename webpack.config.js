@@ -1,8 +1,9 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-const extractLess = new ExtractTextPlugin({
+const ExtractTextPluginConfig = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
   disable: process.env.NODE_ENV === 'development'
 })
@@ -10,14 +11,27 @@ const extractLess = new ExtractTextPlugin({
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/index.html',
   filename: 'index.html',
+  chunks: ['index'],
   inject: 'body'
 })
+const HtmlWebpackPluginConfigApp = new HtmlWebpackPlugin({
+  template: './src/app.html',
+  filename: 'app.html',
+  chunks: ['app'],
+  inject: 'body'
+})
+const CopyWebpackPluginConfig = new CopyWebpackPlugin([{
+  from:'src/assets/images',to:'assets/images'
+}])
 
 module.exports = { 
-  entry: './src/index.js', 
+  entry: {
+    index: './src/index.js', 
+    app: './src/app.js'
+  },
   output: { 
     path: path.resolve('dist'), 
-    filename: 'index_bundle.js'
+    filename: '[name]_bundle.js'
   }, 
   module: { 
     loaders: [ 
@@ -38,7 +52,7 @@ module.exports = {
     ],
     rules: [{
       test: /\.less$/,
-      use: extractLess.extract({
+      use: ExtractTextPluginConfig.extract({
         fallback: 'style-loader',
         use: [ {
           loader: 'css-loader', options: {
@@ -54,11 +68,10 @@ module.exports = {
       test: /\.(png|jpg|gif)$/,
       use: [
         {
-          loader: 'file-loader',
-          options: {}  
+          loader: 'file-loader'
         }
       ]
     }]
   }, 
-  plugins: [extractLess,HtmlWebpackPluginConfig]
+  plugins: [ExtractTextPluginConfig,HtmlWebpackPluginConfig,HtmlWebpackPluginConfigApp,CopyWebpackPluginConfig]
 }
