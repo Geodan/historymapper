@@ -1,7 +1,62 @@
 @import './globals.less';
 
+aside {
+  grid-area: sidebar;  
+  border-left: solid 1px #eeeeec;
+  box-shadow: @shadow-1;
+  background: @light-grey;
+  margin-right: 5px;
+}
+body {
+  display: grid;
+  grid-template-columns: 220px auto;
+  grid-template-rows: 80px auto;
+  grid-template-areas: 
+  "header header"
+  "sidebar content"  ;
+  height: 100vh;
+  background: #E0F2F1;
+  overflow: hidden;
+}
+
+.card {
+  
+  border-left: solid 1px #eeeeec;
+  box-shadow: @shadow-1;
+  background: white;
+  margin: 5px;
+  .card-header {
+    background: @primary-color;
+    padding: 5px;
+    margin: -1px;
+    color: @primary-text;
+  }
+}
+
+#tooltip {
+  display: none;
+}
+header {
+  grid-area: header;
+}
 #content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  grid-area: content;
+  display: inline-grid;
+  grid-template-columns:50% 50%;
+  grid-template-rows:50% 50%;
+  grid-template-areas:   
+  "nw ne"
+  "sw se"
+}
+#content-card {
+  grid-area: nw;
+}
+#graph-card {
+  grid-area: ne;
+}
+#from-card {
+  grid-area: sw;
+}
+#to-card {
+  grid-area: se;
 }
