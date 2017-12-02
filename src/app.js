@@ -2,7 +2,7 @@ import './less/app.less'
 
 import {getData} from './data'
 import {getUrlVars} from './utils/getUrlVars'
-import {createMapData} from './maps'
+
 
 let varobj = getUrlVars()
 

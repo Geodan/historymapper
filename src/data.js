@@ -6,6 +6,7 @@ import {createGeojson,createLocation} from './utils/utils'
 import {createSearch, goSearch} from './search'
 import {renderGraph} from './graph'
 import {createMapData} from './maps'
+import {createCard} from './card'
 
 
 import * as d3 from 'd3'
@@ -51,14 +52,16 @@ function parseResults(results) {
     data = parseData(records,data)
   }
   
-  if(update) {        
+  if(update) {      
     // DATA= data  
     renderGraph(data)
     createMapData(data)
     createSearch(data)
     
-   
+    createCard(data.sleutel[Math.round(Math.random()*data.sleutel.length)].id,'person')  
+    
     goSearch(document.getElementById('search-text').value)
+
   }
 }
 
