@@ -1,4 +1,5 @@
 @import './globals.less';
+@import "~leaflet/dist/leaflet.css";
 
 aside {
   grid-area: sidebar;  
@@ -167,3 +168,12 @@ header {
 #to-card {
   grid-area: se;
 }
+.card-map {
+  display: flex;
+  flex-direction: column;
+  .leaflet-container {
+    width: 100%;
+    height: 100%;
+  }
+}
+

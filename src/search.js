@@ -1,4 +1,4 @@
-import {Fuse} from 'fuse.js'
+import * as Fuse from 'fuse.js'
 
 let KEYSEARCH, RECORDSEARCH
 
@@ -42,5 +42,5 @@ export function createSearch(data) {
 }
 
 export function goSearch(str) {
-  window.alert(str)
+  
 }

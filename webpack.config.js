@@ -29,6 +29,7 @@ module.exports = {
     index: './src/index.js', 
     app: './src/app.js'
   },
+
   output: { 
     path: path.resolve('dist'), 
     filename: '[name]_bundle.js'
