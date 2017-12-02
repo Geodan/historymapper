@@ -16,6 +16,23 @@ export function createMapData(data) {
   })
 
 }
+export function createMapResult(data) {
+  //data in -> filter punten from/to
+  //if search -> create select/noselect
+  // loop door search resultaten en voeg een search = 1 toe aan DATA
+  // maak to/from geojsons
+  // maak clusters, met count en searchcount
+  
+  maps.map(m=>{
+    var features = []
+    data.forEach(r=> {
+      features.push(createGeojson(r,m.src))        
+    })
+    createCluster(m.map,m.results,features,m.src)    
+  })
+
+
+}
 
 function initMap(el) {
   let map = L.map(el+'map').setView([0,0], 2)
