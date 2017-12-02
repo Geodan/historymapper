@@ -1,7 +1,19 @@
 import * as L from 'leaflet'
 import supercluster from 'supercluster'
+import * as d3 from 'd3'
+import {createGeojson} from './utils/utils'
+
+let maps = ['from','to'].map(d=>initMap(d))
 
 export function createMapData(data) {
+  maps.map(m=>{
+    var features = []
+    data.records.forEach(r=> {
+      features.push(createGeojson(r,m.src))        
+    })
+    createCluster(m.map,m.markers,features)
+    
+  })
 
 }
 
@@ -20,9 +32,6 @@ function initMap(el) {
 
   return {map:map, markers: markers, src:el, results: results}
 }
-
-let maps = ['from','to'].map(d=>initMap(d))
-
 
 function createClusterIcon(feature, latlng) {
   var count = feature.properties.point_count!==undefined?feature.properties.point_count:1
@@ -49,3 +58,87 @@ function createSearchIcon(feature, latlng) {
   })
   return L.marker(latlng, {icon: icon,forceZIndex: 1000})
 }
+
+
+function createCluster(map,markers,features,search) {  
+  if (search && map._events.moveend.length>4)  map.off('moveend', map._events.moveend[4].fn)   
+  let index = supercluster({
+    radius: 40,
+    maxZoom: 20
+  })
+  index.load(features)
+  map.on('moveend', ()=>update(search))
+  update(search)
+  
+  function update(search) {	
+    let bbox = map.getBounds()
+    let c = index.getClusters([-180,-90,180,90],map.getZoom())
+    markers.clearLayers()
+    
+    let wb = bbox.getWest()
+    let eb = bbox.getEast()
+    let nb = bbox.getNorth()
+    let sb = bbox.getSouth()
+
+    let nw=[],n=[],ne=[],w=[],u=[],e=[],sw=[],s=[],se=[]
+    c.forEach(p=>{
+      let x = p.geometry.coordinates[0]
+      let y = p.geometry.coordinates[1]
+      if (x==0 && y==0) { //null island
+        u.push(p)
+      }
+      else if(x<wb) { //west
+        if (y > nb) { //north
+          nw.push(p)
+        }
+        else if (y < sb) { //south
+          sw.push(p)
+        }
+        else { //middle
+          w.push(p)
+        }
+
+      }
+      else if (x>eb) { //east
+        if (y > nb) { //north
+          ne.push(p)
+        }
+        else if (y < sb) { //south
+          se.push(p)
+        }
+        else { //middle
+          e.push(p)
+        }
+      }
+      else { //middle
+        if (y > nb) { //north
+          n.push(p)
+        }
+        else if (y < sb) { //south
+          s.push(p)
+        }
+        else { //middle
+          //nothing
+        }
+      }
+
+    })
+    if(search) {
+      let mapdiv =d3.select('#'+search+'-map')
+      mapdiv.select('.n').select('span').text(n.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.nw').select('span').text(nw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.ne').select('span').text(ne.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.w').select('span').text(w.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.e').select('span').text(e.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.sw').select('span').text(sw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.s').select('span').text(s.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.se').select('span').text(se.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.unknown').select('span').text(u.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+    }
+    markers.addData(c.filter(d=>(d.geometry.coordinates[0]!=0&&d.geometry.coordinates[1]!=0)))
+    
+  }
+  return index
+}
+
+

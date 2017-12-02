@@ -5,6 +5,7 @@ import {createGeojson,createLocation} from './utils/utils'
 
 import {createSearch, goSearch} from './search'
 import {renderGraph} from './graph'
+import {createMapData} from './maps'
 
 
 import * as d3 from 'd3'
@@ -53,7 +54,7 @@ function parseResults(results) {
   if(update) {        
     // DATA= data  
     renderGraph(data)
-    //createMapData(data)
+    createMapData(data)
     createSearch(data)
     
    
