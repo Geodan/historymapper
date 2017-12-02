@@ -117,10 +117,10 @@ function dblclick(d) {
 
 function formatPopup(data){
   let html = ''
-  html+='<h4>'+data.name+'</h4>'
+  html+='<b>'+data.name+'</b><br/>'
   for(let key in data) {
     if(key!=='name'&&key!=='id'&&key!=='color'&&key!=='colorLabel'&&data[key]!==undefined&&data[key]!=='') {
-      html+='<p>'+key+': '+data[key]+'</p>'
+      html+='<i>'+key+'</i>: '+data[key]+'<br/>'
     }
   }
   return html

@@ -51,7 +51,18 @@ body {
 }
 
 #tooltip {
-  display: none;
+  position: absolute;
+  padding: 2px;
+  font: 1.2rem @font-sans;
+  background: @dark-grey;
+  border: 1px solid #333;
+  border-radius: @border-radius;
+  pointer-events: none;
+  opacity: 0;
+  color: #fff;
+  i, b {
+    color: #fff;
+  }
 }
 header {
   grid-area: header;
@@ -135,7 +146,7 @@ header {
   .nodes circle {
     stroke: #fff;
     stroke-width: 1.5px;
-    
+    cursor: pointer;
   }
   .nodes circle.fixed {
     stroke: @dark-grey;

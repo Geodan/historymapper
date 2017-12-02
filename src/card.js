@@ -12,6 +12,7 @@ export function setCardData(data,links) {
 }
 
 export function createCard(id, type) {  
+//TODO check for hilights?
   switch (type) {
   case 'person': {
     let person = DATA.sleutel.filter(d=>d.id == id)[0]
