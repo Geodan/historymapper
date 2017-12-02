@@ -5,7 +5,7 @@ import {createCard} from './card'
 
 let KEYSEARCH, RECORDSEARCH
 let brieven = [], sleutels =[]
-let briefresults =  d3.select('#searchbrieven')
+let briefresults =  d3.select('#searchbrieven').select('table')
 let personresults =  d3.select('#searchmensen')
 
 let briefOptions = {
@@ -48,8 +48,7 @@ export function createSearch(data) {
   
 }
 
-export function goSearch(str,search) {
-  console.log(str)
+export function goSearch(str,search) {  
   if(!search)document.getElementById('search-text').value = str
   sleutels = KEYSEARCH.search(str)
   brieven = RECORDSEARCH.search(str)
@@ -64,11 +63,11 @@ export function goSearch(str,search) {
   })
   sleutels.forEach(d=>d3.select('#person-'+d.id).classed('unselected',false))
   let briefdata  =  briefresults
-    .selectAll('div').data(brieven,function(d) { return d.id })
+    .selectAll('tr').data(brieven,function(d) { return d.id })
   
   briefdata.enter()
-    .append('div')
-    .classed('searchrecord',true)
+    .append('tr')
+    .classed('searchrecord record-result',true)
     .merge(briefdata)  
     .on('mouseover',d=>{
       d3.select('#person-'+d.fromId)
@@ -86,7 +85,7 @@ export function goSearch(str,search) {
       d3.select('#link-'+d.toId+'-'+d.fromId)
         .classed('hilight',false)
     })
-    .html(d=>'<span class="fromname">'+d.properties.fromname+'</span><span class="toname">'+d.properties.toname+'</span>')
+    .html(d=>'<td class="fromname click">'+d.properties.fromname+'</td><td class="toname click">'+d.properties.toname+'</td>')
     .on('click',d=>createCard(d.id,'brief'))
 
   briefdata.exit().html('').remove()
@@ -96,7 +95,7 @@ export function goSearch(str,search) {
   
   persondata.enter()
     .append('div')
-    .classed('searchrecord',true)
+    .classed('searchrecord click',true)
     .merge(persondata)  
     .on('mouseover',d=>{
       d3.select('#person-'+d.id)

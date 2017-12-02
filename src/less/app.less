@@ -8,6 +8,76 @@ aside {
   box-shadow: @shadow-1;
   background: @light-grey;
   margin-right: 5px;
+  .card-header {
+    background: @primary-color;
+    height: 32px;
+  }
+  .searchrecord {
+    font-size: 1.2rem;    
+  }
+  .subheader {
+    font-size: 1.6rem;
+    background: @dark-grey;
+    padding: 2px 2px 4px 2px;
+    box-shadow: @shadow-1;
+    color: #fff;
+  }
+}
+#searchForm {
+  display: flex;
+}
+#search-text {
+  border-radius: @border-radius 0 0 @border-radius;
+  border: solid 1px @dark-grey;
+  margin: 3px 0px 0px 3px;
+  padding: 2px;
+  width: 175px;
+}
+#clearsearch {
+  background: @dark-grey;
+  color: white;
+  margin: 3px 0px 0px 0px;
+  width: 25px;
+  border-radius: 0 @border-radius @border-radius 0;
+  box-shadow: @shadow-1;
+  cursor:pointer;
+  &:hover {
+    box-shadow: @shadow-2;
+    margin: 4px 0px 0px -1px;
+    background: tint(@dark-grey, 10%)
+  }
+  &:active {
+    box-shadow: @shadow-1;
+    margin: 3px 0px 0px 0px;
+    background: tint(@dark-grey, -10%)
+  }
+}
+#searchresults {
+  display: grid;
+  grid-template-rows: 24px auto 24px auto;
+  grid-template-areas: "peopleHeader" "people" "brievenHeader" "brieven"; 
+  top: 110px;
+  bottom: 0px;  
+  position: absolute;
+  width: 214px; 
+ 
+}
+tr:nth-child(odd) {
+  background: white;
+}
+#s-m-header {
+  grid-area: "peopleHeader"
+}
+#searchmensen {
+  grid-area: "people";
+  overflow-y: auto;
+}
+#s-b-header {
+  grid-area: "brievenHeader"
+}
+#searchbrieven {
+  grid-area: "brieven";
+  overflow-y: auto;
 }
 body {
   display: grid;
