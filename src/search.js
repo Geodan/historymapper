@@ -41,7 +41,18 @@ let sleutelOptions = {
     //TODO: search in 'color' column
   ]
 } 
-     
+
+
+
+let form = document.getElementById('searchForm')
+form.addEventListener('submit', submitSearch)
+form.addEventListener('input', submitSearch)
+
+function submitSearch(e) {
+  e.preventDefault()
+  goSearch(e.target.value,true)
+}
+
 export function createSearch(data) {  
   KEYSEARCH = new  Fuse(data.sleutel,sleutelOptions)
   RECORDSEARCH = new Fuse(data.records,briefOptions)
