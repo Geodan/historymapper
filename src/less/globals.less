@@ -1,0 +1,94 @@
+@import url(https://fonts.googleapis.com/css?family=Lato|Lora);
+@font-sans: 'Lato', sans-serif;
+@font-serif: 'Lora', serif;
+@primary-color: #009688;
+@primary-text: #fff;
+@secondary-color: #FF5722;
+@dark-grey: #263238;
+@light-grey: #ECEFF1;
+@text-color-inverted: #fff;
+@shadow-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+@shadow-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+@border-radius: 2px;
+
+html { font-size: 62.5%; } 
+body { font-size: 1.4rem; } /* =14px */
+
+body, html {
+  margin: 0px;
+  padding: 0px;
+}
+* {
+  font-family: @font-sans;
+  color: @dark-grey;
+ }
+
+h1 {
+   margin: 10px;
+   font-size: 2.4rem;
+   color: @dark-grey;
+ }
+h2 {
+  margin: 5px;
+  font-size: 2rem;
+}
+p {
+  font-family: @font-serif;
+  color: #000;
+}
+
+header {
+  margin: 0;
+  padding: 10px;
+  width: 100%;
+  height: 60px;
+  background: @dark-grey;
+  color: @text-color-inverted;
+  display: flex;
+  flex-direction: row;
+   box-shadow: @shadow-2;
+  h1 {
+    color: @text-color-inverted
+  }
+}
+
+.btn {
+  text-decoration: none;
+  display: inline-block;
+  background: @primary-color;
+  padding: 10px 15px 10px 15px;
+  color: @primary-text;
+  box-shadow: @shadow-1;
+  margin: 3px 4px 4px 4px;
+  border-radius: @border-radius;
+  align-self: start;
+  transition: all 50ms ease-in-out;
+  
+  cursor: pointer;
+  &:hover {
+    box-shadow: @shadow-2;
+    margin: 4px 4px 3px 4px;  
+    background: tint(@primary-color, 10%)
+  }
+  &:active {
+    box-shadow: @shadow-1;
+    margin: 3px 4px 4px 4px;
+    background: tint(@primary-color, -10%)
+  }
+}
+
+.click {
+  cursor: pointer;
+  color: @primary-color;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.search {
+  cursor: help;
+  color: darken(@primary-color,8%);
+  &:hover {
+    text-decoration: underline;
+  }
+}

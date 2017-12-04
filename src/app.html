@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Historymapper</title>
+
+</head>
+<body>
+    <header><h1>Historymapper</h1>
+       
+      </header>
+      
+      <aside>
+          <div class="card-header">
+              <form id="searchForm">
+                <input type="text" id="search-text" placeholder="Search" name="searchfield">
+                <div id="clearsearch">x</div>
+              </form>             
+            </div>
+            <div id="searchresults">
+              <div id="s-m-header" class="subheader">People</div>
+              <div class="subresult"  id="searchmensen"></div>
+              <div id="s-b-header"  class="subheader">Letters</div>
+              <div class="subresult"  id="searchbrieven">
+                <table></table>
+
+              </div>
+            </div>
+      </aside>
+
+      <div id="content">
+        <div id="content-card" class="card">
+          <div class="card-header">
+            <span>Content card</span>
+            <div class="btn" card="card">reset</div> 
+          </div>
+          
+            <div id="content-card-text"></div>      
+
+        </div>
+        <div id="graph-card" class="card">
+          <div class="card-header">
+            <span>Network graph</span>
+            <div class="btn" card="graph">reset</div> 
+          </div>
+          <svg id="graph"></svg>  
+        </div>
+        <div id="from-card" class="card card-map">
+          <div class="card-header">
+            <span>Source map</span>
+            <div class="btn" card="from">reset</div> 
+          </div>
+          <div id="frommap"></div>
+          
+            <div class="unknown"><span></span></div>
+            <div class="nrow maprow"><div class="nw"><span></span></div><div class="n"><span></span></div><div class="ne"><span></span></div></div>
+            <div class="maprow"><div class="w"><span></span></div><div id=""></div><div class="e"><span></span></div></div>
+            <div class="maprow"><div class="sw"><span></span></div><div class="s"><span></span></div><div class="se"><span></span></div></div>
+          
+        </div>
+        <div id="to-card" class="card card-map">
+          <div class="card-header">
+            <span>Destination map</span>
+            <div class="btn" card="to">reset</div> 
+          </div>
+          <div id="tomap"></div>
+          
+            <div class="unknown"><span></span></div>
+            <div class="nrow maprow"><div class="nw"><span></span></div><div class="n"><span></span></div><div class="ne"><span></span></div></div>
+            <div class=" maprow"><div class="w"><span></span></div><div id=""></div><div class="e"><span></span></div></div>
+            <div class=" maprow"><div class="sw"><span></span></div><div class="s"><span></span></div><div class="se"><span></span></div></div>
+          
+        </div>
+      
+      </div>
+      <div id="tooltip" class="tooltip"></div>
+</body>
+</html>

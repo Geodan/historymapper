@@ -1,0 +1,250 @@
+@import './globals.less';
+@import "~leaflet/dist/leaflet.css";
+@import './markers.less';
+
+aside {
+  grid-area: sidebar;  
+  border-left: solid 1px #eeeeec;
+  box-shadow: @shadow-1;
+  background: @light-grey;
+  margin-right: 5px;
+  .card-header {
+    background: @primary-color;
+    height: 32px;
+  }
+  .searchrecord {
+    font-size: 1.2rem;    
+  }
+  .subheader {
+    font-size: 1.6rem;
+    background: @dark-grey;
+    padding: 2px 2px 4px 2px;
+    box-shadow: @shadow-1;
+    color: #fff;
+  }
+}
+#searchForm {
+  display: flex;
+}
+#search-text {
+  border-radius: @border-radius 0 0 @border-radius;
+  border: solid 1px @dark-grey;
+  margin: 3px 0px 0px 3px;
+  padding: 2px;
+  width: 175px;
+}
+#clearsearch {
+  background: @dark-grey;
+  color: white;
+  margin: 3px 0px 0px 0px;
+  width: 25px;
+  border-radius: 0 @border-radius @border-radius 0;
+  box-shadow: @shadow-1;
+  cursor:pointer;
+  &:hover {
+    box-shadow: @shadow-2;
+    margin: 4px 0px 0px -1px;
+    background: tint(@dark-grey, 10%)
+  }
+  &:active {
+    box-shadow: @shadow-1;
+    margin: 3px 0px 0px 0px;
+    background: tint(@dark-grey, -10%)
+  }
+}
+#searchresults {
+  display: grid;
+  grid-template-rows: 24px auto 24px auto;
+  grid-template-areas: "peopleHeader" "people" "brievenHeader" "brieven"; 
+  top: 110px;
+  bottom: 0px;  
+  position: absolute;
+  width: 214px; 
+ 
+}
+tr:nth-child(odd) {
+  background: white;
+}
+#s-m-header {
+  grid-area: "peopleHeader"
+}
+#searchmensen {
+  grid-area: "people";
+  overflow-y: auto;
+}
+#s-b-header {
+  grid-area: "brievenHeader"
+}
+#searchbrieven {
+  grid-area: "brieven";
+  overflow-y: auto;
+}
+body {
+  display: grid;
+  grid-template-columns: 220px auto;
+  grid-template-rows: 80px auto;
+  grid-template-areas: 
+  "header header"
+  "sidebar content"  ;
+  height: 100vh;
+  background: #E0F2F1;
+  overflow: hidden;
+}
+
+.card {
+  
+  border-left: solid 1px #eeeeec;
+  box-shadow: @shadow-1;
+  background: white;
+  margin: 5px;
+  .card-header {
+    background: @primary-color;
+    padding: 5px;
+    margin: -1px;
+    color: @primary-text;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    span {
+      margin:5px;
+      font-size: 2rem;
+    }
+    .btn {      
+      background: @dark-grey;
+      &:hover {
+        background: tint(@dark-grey, 5%)
+      }
+      &:active {
+
+        background: tint(@dark-grey, -10%)
+      }
+    }
+  }
+}
+
+#tooltip {
+  position: absolute;
+  padding: 2px;
+  font: 1.2rem @font-sans;
+  background: @dark-grey;
+  border: 1px solid #333;
+  border-radius: @border-radius;
+  pointer-events: none;
+  opacity: 0;
+  color: #fff;
+  i, b {
+    color: #fff;
+  }
+}
+header {
+  grid-area: header;
+}
+#content {
+  grid-area: content;
+  display: inline-grid;
+  grid-template-columns:50% 50%;
+  grid-template-rows:50% 50%;
+  grid-template-areas:   
+  "nw ne"
+  "sw se";
+  top: 80px;
+  bottom: 0px;
+  position: absolute;
+  left: 215px;
+  right: 0px;
+}
+#content-card {
+  grid-area: nw;
+  display: flex;
+  flex-direction: column;
+}
+#content-card-text {
+  overflow-y:  auto;
+  .label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 2px 5px 2px 5px;
+    
+  }
+  .labelcontent {
+    margin: 2px 5px 8px 5px;
+    font-family: @font-serif;
+    
+  }
+  table {
+    width: 100%;
+  }
+  tr:nth-child(even) {
+    background: @light-grey;
+  }
+  th {
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 2px 5px 2px 5px;
+  }
+  .content__people {
+    display: flex;
+    flex-direction: row;
+    flex-flow: flow;
+    justify-content: space-between;
+    .content__people-address {
+      border: solid 1px @light-grey;
+      padding: 10px;
+      border-radius: @border-radius;
+      margin: 5px;
+      font-family: @font-sans;
+    }
+  }
+}
+#graph-card {
+  grid-area: ne;
+  display: flex;
+  flex-direction: column;
+  svg {
+    width:100%;
+    height: 100%;
+  }
+  .links line {
+    stroke: @dark-grey;
+    stroke-opacity: 0.4;
+    
+  }
+  .links line.hilight {
+    stroke: @secondary-color;
+    stroke-width: 3px !important;
+    stroke-opacity: 1 !important;
+  }
+  .nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+    cursor: pointer;
+  }
+  .nodes circle.fixed {
+    stroke: @dark-grey;
+  }
+  .nodes circle.hilight {
+    stroke: @secondary-color;
+    stroke-width: 4px;
+    z-index: 1000;
+    
+  }
+  .unselected {
+    opacity: 0.1 !important;
+  }
+}
+#from-card {
+  grid-area: sw;
+}
+#to-card {
+  grid-area: se;
+}
+.card-map {
+  display: flex;
+  flex-direction: column;
+  .leaflet-container {
+    width: 100%;
+    height: 100%;
+  }
+}
+
