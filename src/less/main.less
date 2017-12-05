@@ -1,1 +1,56 @@
 @import './globals.less';
+
+h2 {
+	color: @primary-color;
+	margin-left: -40px;
+
+}
+
+section {
+	max-width: 900px;
+	font-size: 1.8rem;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 40px;
+	padding-left: 40px;
+
+	.note {
+		padding: 10px;
+		border: solid 1px @primary-color;
+	}
+}
+
+#section2 {
+
+	border-bottom: @primary-color 1px solid;
+	.columns-2 {
+		display: flex;
+		flex-flow: row;
+		.right {
+			margin-top: 50px;
+		}
+	}
+	img {
+		border: solid 1px @dark-grey;
+		box-shadow: @shadow-2;
+		margin: 5px;
+		clear: both;
+	}
+}
+
+#publish-img {
+	width: 100%;
+}
+
+.code {
+	border: solid 1px @light-grey;
+	margin: 10px;
+	padding: 5px;
+}
+
+#section3__source-url {
+	font-size: 1.5rem;
+	width: 400px;
+	padding: 3px;
+	margin-left: 5px;
+}
