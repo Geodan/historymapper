@@ -6,4 +6,4 @@ import {getUrlVars} from './utils/getUrlVars'
 
 let varobj = getUrlVars()
 
-varobj.url?getData(varobj.url):getData('1tZFtz3UKRoLUzDR26wtcQ4OhQCcK4kL-to-SY-bmW2M')
+varobj.source?getData(varobj.source):getData('1tZFtz3UKRoLUzDR26wtcQ4OhQCcK4kL-to-SY-bmW2M')
