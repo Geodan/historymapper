@@ -37,7 +37,7 @@ function getResults(requests) {
 function parseResults(results) {
   let update = false
   let data = {}
-  let sleutel = results.filter(d=>d.feed.title.$t==='Sleutel')[0]
+  let sleutel = results.filter(d=>d.feed.title.$t==='Key')[0]
   let st = new Date(sleutel.feed.updated.$t).getTime()
   if(st > SLEUTELTIME || data.sleutel === undefined){
     update = true
