@@ -60,7 +60,7 @@ function formatPersonCard(data) {
     .classed('icon small',true)
     .text(' s')
     for(let key in data.properties) {
-      if(key!=='name'&&key!=='id'&&key!=='color'&&key!=='colorLabel'&&key!=='tags') {
+      if(['name','id','color','colorLabel','tags'].indexOf(key) < 0) {      
         createLabelContent(card,data,key)
       }
     }
@@ -128,8 +128,7 @@ function formatBriefCard(data) {
   let fromlocation = checkEmpty(data.properties.fromlocation)
   let toname = checkEmpty(data.properties.toname)
   let tolocation = checkEmpty(data.properties.tolocation)
-  let tags = checkEmpty(data.properties.tags)
-  let description = checkEmpty(data.properties.description)
+  let tags = checkEmpty(data.properties.tags)  
   //let url = checkEmpty(data.properties.url)
   let people = card.append('div').classed('content__people',true)
   let from = people.append('div').classed('frompart',true).classed('content__people-address',true)
@@ -176,8 +175,12 @@ function formatBriefCard(data) {
     .classed('click',()=>tolocation?true:false)
     .text(()=>tolocation?tolocation:'unknown')
     .on('click',()=>tolocation?goSearch(tolocation):false)
-  card.append('div').classed('label',true).text('Description')
-  card.append('div').classed('labelcontent',true).text(()=>description?description:'-')
+    for(let key in data.properties) {
+      if(['sourceid','fromid','fromlocation','fromaccuracy','fromlatitude','fromlongitude','toid','toname','tolocation','toacccuracy','tolatitude','tolongitude','tags' ].indexOf(key) < 0) {
+        createLabelContent(card,data,key)
+      }
+    }
+ 
   card.append('div').classed('label',true).text('Tags')
   tags?tags.forEach(tag=>card.append('span').classed('tags click',true)
     .text(tag).on('click',()=>goSearch(tag))):card.append('div')
