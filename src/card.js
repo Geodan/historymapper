@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import {checkEmpty} from './utils/checkEmpty'
+import {capitalizeFirstLetter} from './utils/utils'
 import {goSearch} from './search'
 
 let card = d3.select('#content-card-text')
@@ -29,13 +30,18 @@ export function createCard(id, type) {
   }
 }
 
+function createLabelContent(card, data, tag, search) {
+  let value = checkEmpty(data.properties[tag])
+  card.append('div').classed('label',true).text(capitalizeFirstLetter(tag))
+  card.append('div').classed('labelcontent',true).text(()=>value?value:'-')
+
+  
+}
 
 function formatPersonCard(data) {
   card.html('')
   let name = checkEmpty(data.properties.name)
-  let alternatives = checkEmpty(data.properties.alternatives)
   let tags = checkEmpty(data.properties.tags)
-  let description = checkEmpty(data.properties.description)
   let relations = LINKS.filter(d=>(d.source.id==data.id||d.target.id==data.id))  
   card.append('h2')
     .append('span')
@@ -53,10 +59,12 @@ function formatPersonCard(data) {
     .append('span')
     .classed('icon small',true)
     .text(' s')
-  card.append('div').classed('label',true).text('Alternatives')
-  card.append('div').classed('labelcontent',true).text(()=>alternatives?alternatives:'-')
-  card.append('div').classed('label',true).text('Description')
-  card.append('div').classed('labelcontent',true).text(()=>description?description:'-')
+    for(let key in data.properties) {
+      if(key!=='name'&&key!=='id'&&key!=='color'&&key!=='colorLabel'&&key!=='tags') {
+        createLabelContent(card,data,key)
+      }
+    }
+    
   card.append('div').classed('label',true).text('Tags')
   tags?tags.forEach(tag=>card.append('span').classed('tags search',true)
     .html(tag+'<span class="icon small"> s</span>').on('click',()=>goSearch(tag))):card.append('div').classed('labelcontent',true)
@@ -109,6 +117,9 @@ function formatPersonCard(data) {
     rd.append('td').append('span').classed('click',checkEmpty(d.properties.url)?true:false)
       .text(checkEmpty(d.properties.url)?'link':'-').on('click',()=>createCard(d.recordId,'brief'))
   })
+
+
+
 }
 
 function formatBriefCard(data) {
