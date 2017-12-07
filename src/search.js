@@ -10,9 +10,9 @@ let personresults =  d3.select('#searchmensen').select('table')
 
 let briefOptions = {
   shouldSort: true,
-  threshold: 0.3,
+  threshold: 0.2,
   location: 0,
-  distance: 40,
+  distance: 20,
   maxPatternLength: 16,
   minMatchCharLength: 1,
   tokenize: false,
@@ -113,8 +113,6 @@ export function goSearch(str,search) {
   
   persondata.enter()
     .append('tr')
-    .append('td')
-    .classed('searchrecord click',true)
     .merge(persondata)  
     .on('mouseover',d=>{
       d3.select('#person-'+d.id)
@@ -123,7 +121,8 @@ export function goSearch(str,search) {
     .on('mouseout',d=>{
       d3.select('#person-'+d.id)
         .classed('hilight',false)
-    }).text(d=>d.properties.name).on('click',d=>createCard(d.id,'person'))
+    }).html(d=>'<td class="searchrecord click">'+d.properties.name+'</td>')
+    .on('click',d=>createCard(d.id,'person'))
 
   persondata.exit().remove()
   createMapResult(brieven)
