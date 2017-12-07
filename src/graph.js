@@ -144,3 +144,13 @@ function formatPopup(data){
   }
   return html
 }
+
+d3.select('#resetButton-graph').on('click',()=>{
+  d3.selectAll('.fixed')
+  .classed('fixed',false)
+  .select(d=>d.fx=d.fy=null)
+  
+  d3.selectAll('.nodes circle').classed('unselected hilight',false)
+  d3.selectAll('.links line').classed('unselected hilight',false)
+  redraw()
+})

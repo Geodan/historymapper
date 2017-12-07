@@ -35,7 +35,7 @@ export function createMapResult(data) {
 }
 
 function initMap(el) {
-  let map = L.map(el+'map').setView([0,0], 2)
+  let map = L.map(el+'map').setView([0,0], 1)
   L.tileLayer( 'https://stamen-tiles-' + ['a', 'b', 'c', 'd'][Math.random() * 4 | 0] + '.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map)
@@ -159,3 +159,9 @@ function createCluster(map,markers,features,search) {
 }
 
 
+d3.select('#resetButton-from').on('click',()=>{
+  maps[0].map.setView([0,0], 1)
+})
+d3.select('#resetButton-to').on('click',()=>{
+  maps[1].map.setView([0,0], 1)
+})
