@@ -48,6 +48,8 @@ let form = document.getElementById('searchForm')
 form.addEventListener('submit', submitSearch)
 form.addEventListener('input', submitSearch)
 
+d3.select('#clearsearch').on('click',()=>goSearch(''))
+
 function submitSearch(e) {
   e.preventDefault()
   goSearch(e.target.value,true)
@@ -61,9 +63,14 @@ export function createSearch(data) {
 
 export function goSearch(str,search) {  
   if(!search)document.getElementById('search-text').value = str
-  sleutels = KEYSEARCH.search(str)
-  brieven = RECORDSEARCH.search(str)
-
+  if(str=='') {
+    sleutels = KEYSEARCH.list;
+    brieven = RECORDSEARCH.list;
+  }
+  else {
+    sleutels = KEYSEARCH.search(str)
+    brieven = RECORDSEARCH.search(str)
+  }
 
   d3.selectAll('.nodes circle').classed('unselected',true)
   d3.selectAll('.links line').classed('unselected',true)
