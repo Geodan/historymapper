@@ -65,8 +65,8 @@ module.exports = {
           }
         }]
       })
-    },{
-      test: /\.(png|jpg|gif)$/,
+    }, {
+      test: /\.(png|woff|woff2|eot|ttf|svg)$/,
       use: [
         {
           loader: 'file-loader'

@@ -58,7 +58,7 @@ function parseResults(results) {
     createMapData(data)
     createSearch(data)
     
-    createCard(data.sleutel[Math.round(Math.random()*data.sleutel.length)].id,'person')  
+    createCard(data.sleutel[Math.floor(Math.random()*data.sleutel.length)].id,'person')  
     
     goSearch(document.getElementById('search-text').value)
 

@@ -1,6 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Lato|Lora);
+@import './glyphter.less';
 @font-sans: 'Lato', sans-serif;
 @font-serif: 'Lora', serif;
+@font-icon: 'Glyphter';
 @primary-color: #009688;
 @primary-text: #fff;
 @secondary-color: #FF5722;
@@ -19,8 +21,7 @@ body, html {
   padding: 0px;
 }
 * {
-  font-family: @font-sans;
-  color: @dark-grey;
+  font-family: @font-sans;  
  }
 
 h1 {
@@ -39,7 +40,7 @@ p {
 
 header {
   margin: 0;
-  padding: 10px;
+  padding: 10px 0 10px 0;
   width: 100%;
   height: 60px;
   background: @dark-grey;
@@ -47,8 +48,20 @@ header {
   display: flex;
   flex-direction: row;
    box-shadow: @shadow-2;
+   justify-content: space-between;
   h1 {
     color: @text-color-inverted
+  }
+  a {
+    color: @text-color-inverted;
+    text-decoration: none;
+    &:hover {
+      color: darken(@text-color-inverted, 10%)
+    }
+  }
+  .external-links {
+    line-height: 2.5em;
+    margin: 10px;
   }
 }
 
@@ -87,8 +100,14 @@ header {
 
 .search {
   cursor: help;
-  color: darken(@primary-color,8%);
+  color: darken(@primary-color,8%);  
   &:hover {
     text-decoration: underline;
+  }
+}
+.icon {
+  font-family: @font-icon;
+  &.small {
+    font-size: 67%;
   }
 }

@@ -7,7 +7,7 @@
   "author": "Steven M. Ottens <steven.ottens@geodan.nl>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack -p",
+    "build": "webpack",
     "start": "webpack-dev-server"
   },
   "devDependencies": {

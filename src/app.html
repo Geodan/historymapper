@@ -7,14 +7,16 @@
 </head>
 <body>
     <header><h1>Historymapper</h1>
-       
+      <div class="external-links">
+       <a href="https://github.com/Geodan/historymapper" title="Source code" target="_blank" id="github" class="icon">g</a>
+    </div>
       </header>
       
       <aside>
           <div class="card-header">
               <form id="searchForm">
                 <input type="text" id="search-text" placeholder="Search" name="searchfield">
-                <div id="clearsearch">x</div>
+                <div id="clearsearch" class="icon">x</div>
               </form>             
             </div>
             <div id="searchresults">
@@ -31,7 +33,7 @@
       <div id="content">
         <div id="content-card" class="card">
           <div class="card-header">
-            <span>Content card</span>
+            <span><span class="icon">c</span>Content card</span>
             <div class="btn" card="card">reset</div> 
           </div>
           
@@ -40,14 +42,14 @@
         </div>
         <div id="graph-card" class="card">
           <div class="card-header">
-            <span>Network graph</span>
+            <span><span class="icon">n</span>Network graph</span>
             <div class="btn" card="graph">reset</div> 
           </div>
           <svg id="graph"></svg>  
         </div>
         <div id="from-card" class="card card-map">
           <div class="card-header">
-            <span>Source map</span>
+            <span><span class="icon">m</span>Source map</span>
             <div class="btn" card="from">reset</div> 
           </div>
           <div id="frommap"></div>
@@ -60,7 +62,7 @@
         </div>
         <div id="to-card" class="card card-map">
           <div class="card-header">
-            <span>Destination map</span>
+            <span><span class="icon">m</span>Destination map</span>
             <div class="btn" card="to">reset</div> 
           </div>
           <div id="tomap"></div>
