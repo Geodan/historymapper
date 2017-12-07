@@ -26,9 +26,11 @@ function redraw () {
   svg
     .attr("width", width)
     .attr("height", height)
+    simulation.force('radial', d3.forceRadial(height/16 , width / 2, height / 2))
+    .alphaTarget(1).restart()
+    for (var i = 0; i < 10; ++i) simulation.tick();
+    simulation.alphaTarget(0)
 
-  simulation.alphaTarget(1).restart()
-  simulation.alphaTarget(0)
 }  
 window.addEventListener("resize", redraw)
 
