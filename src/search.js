@@ -6,7 +6,7 @@ import {createCard} from './card'
 let KEYSEARCH, RECORDSEARCH
 let brieven = [], sleutels =[]
 let briefresults =  d3.select('#searchbrieven').select('table')
-let personresults =  d3.select('#searchmensen')
+let personresults =  d3.select('#searchmensen').select('table')
 
 let briefOptions = {
   shouldSort: true,
@@ -109,10 +109,11 @@ export function goSearch(str,search) {
   briefdata.exit().html('').remove()
   
   let persondata  =  personresults
-    .selectAll('div').data(sleutels,function(d) { return d.id })
+    .selectAll('tr').data(sleutels,function(d) { return d.id })
   
   persondata.enter()
-    .append('div')
+    .append('tr')
+    .append('td')
     .classed('searchrecord click',true)
     .merge(persondata)  
     .on('mouseover',d=>{
