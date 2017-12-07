@@ -1,11 +1,14 @@
 import * as d3 from 'd3'
 
 import {setCardData,createCard} from './card'
-
-let width = 600 //TODO: make this dynamic
-let height = 600
+let svgDiv = document.getElementById('graphDiv')
+let width = svgDiv.clientWidth
+let height = svgDiv.clientHeight
 let LINKS, node
 let svg = d3.select('#graph')
+svg
+.attr("width", width)
+.attr("height", height)
 let colors = d3.scaleOrdinal(d3.schemeCategory10)
 let tooltip = d3.select('#tooltip')
 let simulation = d3.forceSimulation()
@@ -14,6 +17,20 @@ let simulation = d3.forceSimulation()
   .force('radial', d3.forceRadial(height/16 , width / 2, height / 2))
   .force('link', d3.forceLink(LINKS).strength(0.5).distance(20).iterations(10))
   .force('collide',d3.forceCollide( function(d){return d.linkCount*1.5 + 2 }).iterations(10))
+
+function redraw () {
+  width = svgDiv.clientWidth
+  height = svgDiv.clientHeight
+
+  // Use the extracted size to set the size of an SVG element.
+  svg
+    .attr("width", width)
+    .attr("height", height)
+
+  simulation.alphaTarget(1).restart()
+  simulation.alphaTarget(0)
+}  
+window.addEventListener("resize", redraw)
 
 export function renderGraph(data) {
   LINKS = createLinks(data)
