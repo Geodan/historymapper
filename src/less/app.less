@@ -264,6 +264,11 @@ header {
 .card-map {
   display: flex;
   flex-direction: column;
+  .hilight {
+    border: @secondary-color solid 4px;
+    
+    
+  }
   .leaflet-container {
     width: 100%;
     height: 100%;
@@ -279,6 +284,8 @@ header {
   height: 100%;
   position: relative;
   overflow: hidden;
+
+  
   .outside-number {
     position: absolute;
     z-index: 1000;
@@ -290,6 +297,7 @@ header {
     line-height: 20px;
     box-shadow: @shadow-1;
     font-size: 1rem;
+    cursor: pointer;
   }
   .nw {
     top: 0;

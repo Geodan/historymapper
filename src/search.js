@@ -22,7 +22,9 @@ let briefOptions = {
     'properties.tags',
     'properties.fromlocation',
     'properties.toname',
-    'properties.tolocation'    
+    'properties.tolocation',
+    'fromLoc',
+    'toLoc'    
   ]
 }
 let sleutelOptions = {
@@ -94,6 +96,10 @@ export function goSearch(str,search) {
         .classed('hilight',true)
       d3.select('#link-'+d.toId+'-'+d.fromId)
         .classed('hilight',true)
+      d3.select('.'+d.fromLoc)
+        .classed('hilight',true)
+      d3.select('.'+d.toLoc)
+        .classed('hilight',true)
     })
     .on('mouseout',d=>{
       d3.select('#person-'+d.fromId)
@@ -102,7 +108,12 @@ export function goSearch(str,search) {
         .classed('hilight',false)
       d3.select('#link-'+d.toId+'-'+d.fromId)
         .classed('hilight',false)
+      d3.select('.'+d.fromLoc)
+        .classed('hilight',false)
+      d3.select('.'+d.toLoc)
+        .classed('hilight',false)
     })
+
     .html(d=>'<td class="fromname click">'+d.properties.fromname+'</td><td class="toname click">'+d.properties.toname+'</td>')
     .on('click',d=>createCard(d.id,'brief'))
 

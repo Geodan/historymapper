@@ -1,7 +1,7 @@
 import {parseGoogleSpreadsheetURL} from './utils/parseGoogleSpreadsheetURL'
 import {buildGoogleFeedURL} from './utils/buildGoogleFeedURL'
 import {extractData} from './utils/extractData'
-import {createGeojson,createLocation} from './utils/utils'
+import {createGeojson,createLocation, replaceAll} from './utils/utils'
 
 import {createSearch, goSearch} from './search'
 import {renderGraph} from './graph'
@@ -100,7 +100,7 @@ function parseData(records,data) {
       d.fromname !== ''?from.properties.alternatives += ' '+d.fromname:false
       d.fromname = from.properties.name
     }
-    record.fromLoc = 'la'+d.fromlatitude+'lo'+d.fromlongitude
+    record.fromLoc = replaceAll('fromla'+d.fromlatitude+'lo'+d.fromlongitude,'.','p')
     record.fromAccuracy =+ d.fromaccuracy
     record.fromLon=d.fromlongitude==''?null:+d.fromlongitude
     record.fromLat=d.fromlatitude==''?null:+d.fromlatitude
@@ -111,7 +111,7 @@ function parseData(records,data) {
       d.toname !== ''?to.properties.alternatives += ' '+d.toname:false
       d.toname = to.properties.name
     }
-    record.toLoc = 'la'+d.tolatitude+'lo'+d.tolongitude
+    record.toLoc = replaceAll('tola'+d.tolatitude+'lo'+d.tolongitude,'.','p')
     record.toAccuracy =+ d.toaccuracy
     record.toLon=d.tolongitude==''?null:+d.tolongitude
     record.toLat=d.tolatitude==''?null:+d.tolatitude

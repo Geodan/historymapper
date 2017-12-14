@@ -65,12 +65,13 @@ function createClusterIcon(feature, latlng) {
 
 function createSearchIcon(feature, latlng) {
   var count = feature.properties.point_count!==undefined?feature.properties.point_count:1
+  var cls = feature.properties.id?feature.properties.id:feature.properties.ids.reduce((a,c)=>a+' '+c,'')      
   var size =
     count < 100 ? 'small' :
       count < 1000 ? 'medium' : 'large'
   var icon = L.divIcon({
     html: '<div><span>' + count + '</span></div>',
-    className: 'search-cluster search-cluster-' + size,
+    className: 'search-cluster search-cluster-' + size+ ' '+cls,
     iconSize: L.point(40, 40)
   })
   return L.marker(latlng, {icon: icon,forceZIndex: 1000})
@@ -81,7 +82,22 @@ function createCluster(map,markers,features,search) {
   if (search && map._events.moveend.length>4)  map.off('moveend', map._events.moveend[4].fn)   
   let index = supercluster({
     radius: 40,
-    maxZoom: 20
+    maxZoom: 20,
+    initial: function() { return {ids: []} },
+    map: function(props) { return {ids: props.id} },
+    reduce: function(accumulated, props) {
+      if(typeof(props.ids)==='string' && accumulated.ids.indexOf(props.ids)<0) {
+        accumulated.ids.push(props.ids)     
+      }
+      else if (typeof(props.ids)!=='string') {        
+        props.ids.forEach(p=> {
+          if(accumulated.ids.indexOf(p)<0) {
+            accumulated.ids.push(p)
+          }
+        })
+      }      
+      return accumulated
+    }
   })
   index.load(features)
   map.on('moveend', ()=>update(search))
@@ -142,14 +158,14 @@ function createCluster(map,markers,features,search) {
     })
     if(search) {
       let mapdiv =d3.select('#'+search+'-card')
-      mapdiv.select('.n').select('span').text(n.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.nw').select('span').text(nw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.ne').select('span').text(ne.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.w').select('span').text(w.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.e').select('span').text(e.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.sw').select('span').text(sw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.s').select('span').text(s.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.se').select('span').text(se.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.n').on('click',()=>map.panBy([0,-200])).select('span').text(n.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.nw').on('click',()=>map.panBy([-200,-200])).select('span').text(nw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.ne').on('click',()=>map.panBy([200,-200])).select('span').text(ne.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.w').on('click',()=>map.panBy([-200,0])).select('span').text(w.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.e').on('click',()=>map.panBy([200,0])).select('span').text(e.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.sw').on('click',()=>map.panBy([-200,200])).select('span').text(sw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.s').on('click',()=>map.panBy([0,200])).select('span').text(s.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.se').on('click',()=>map.panBy([200,200])).select('span').text(se.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
       mapdiv.select('.unknown').text('Unknown: '+u.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
     }
     markers.addData(c.filter(d=>(d.geometry.coordinates[0]!=0&&d.geometry.coordinates[0]!=null&&d.geometry.coordinates[1]!=0&&d.geometry.coordinates[1]!=null)))
