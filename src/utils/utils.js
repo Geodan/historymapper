@@ -31,7 +31,8 @@ export function createGeojson(record,src) {
       'personid': record[src+'Id'],
       'briefid': record.id,
       'src': src,
-      'selected': record.selected!==undefined?1:0
+      'selected': record.selected!==undefined?1:0,
+      'name': record.properties[src+'name']
     }
   }
 }

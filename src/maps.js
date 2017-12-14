@@ -60,7 +60,7 @@ function createClusterIcon(feature, latlng) {
     className: 'marker-cluster marker-cluster-' + size,
     iconSize: L.point(40, 40)
   })
-  return L.marker(latlng, {icon: icon})
+  return L.marker(latlng, {icon: icon,bubblingMouseEvents:true, forceZIndex:1})
 }
 
 function createSearchIcon(feature, latlng) {
@@ -74,9 +74,19 @@ function createSearchIcon(feature, latlng) {
     className: 'search-cluster search-cluster-' + size+ ' '+cls,
     iconSize: L.point(40, 40)
   })
-  return L.marker(latlng, {icon: icon,forceZIndex: 1000})
+  return L.marker(latlng, {icon: icon,forceZIndex: 1000,riseOnHover:true})  
 }
 
+function createPopup(layer,index) {
+  let brieven = [];
+  if(layer.feature.properties.cluster) {
+    brieven = index.getLeaves(layer.feature.properties.cluster_id,Infinity).map(b=>b.properties.name)
+  }
+  else {
+    brieven.push(layer.feature.properties.name)
+  }
+  return brieven.filter((v,i,s)=>s.indexOf(v)===i).toString()
+}
 
 function createCluster(map,markers,features,search) {  
   if (search && map._events.moveend.length>4)  map.off('moveend', map._events.moveend[4].fn)   
@@ -106,6 +116,7 @@ function createCluster(map,markers,features,search) {
   function update(search) {	
     let bbox = map.getBounds()
     let c = index.getClusters([-180,-90,180,90],map.getZoom())
+    
     markers.clearLayers()
     
     let wb = bbox.getWest()
@@ -168,8 +179,9 @@ function createCluster(map,markers,features,search) {
       mapdiv.select('.se').on('click',()=>map.panBy([200,200])).select('span').text(se.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
       mapdiv.select('.unknown').text('Unknown: '+u.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
     }
-    markers.addData(c.filter(d=>(d.geometry.coordinates[0]!=0&&d.geometry.coordinates[0]!=null&&d.geometry.coordinates[1]!=0&&d.geometry.coordinates[1]!=null)))
-    
+    markers.unbindPopup()
+    markers.addData(c.filter(d=>(d.geometry.coordinates[0]!=0&&d.geometry.coordinates[1]!=0)))
+   if(search) markers.bindPopup(function(layer){return createPopup(layer,index)})
   }
   return index
 }
