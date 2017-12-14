@@ -101,7 +101,7 @@ function createCluster(map,markers,features,search) {
     c.forEach(p=>{
       let x = p.geometry.coordinates[0]
       let y = p.geometry.coordinates[1]
-      if (x==0 && y==0) { //null island
+      if ((x==0 || x==null) && (y==0||y==null)) { //null island
         u.push(p)
       }
       else if(x<wb) { //west
@@ -141,7 +141,7 @@ function createCluster(map,markers,features,search) {
 
     })
     if(search) {
-      let mapdiv =d3.select('#'+search+'-map')
+      let mapdiv =d3.select('#'+search+'-card')
       mapdiv.select('.n').select('span').text(n.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
       mapdiv.select('.nw').select('span').text(nw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
       mapdiv.select('.ne').select('span').text(ne.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
@@ -150,9 +150,9 @@ function createCluster(map,markers,features,search) {
       mapdiv.select('.sw').select('span').text(sw.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
       mapdiv.select('.s').select('span').text(s.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
       mapdiv.select('.se').select('span').text(se.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
-      mapdiv.select('.unknown').select('span').text(u.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
+      mapdiv.select('.unknown').text('Unknown: '+u.reduce((a,c)=>a+(c.properties.point_count?c.properties.point_count:1),0))
     }
-    markers.addData(c.filter(d=>(d.geometry.coordinates[0]!=0&&d.geometry.coordinates[1]!=0)))
+    markers.addData(c.filter(d=>(d.geometry.coordinates[0]!=0&&d.geometry.coordinates[0]!=null&&d.geometry.coordinates[1]!=0&&d.geometry.coordinates[1]!=null)))
     
   }
   return index
